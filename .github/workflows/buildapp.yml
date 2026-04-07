@@ -18,7 +18,7 @@ on:
         type: string
       bundle_id:
         description: "Modify the bundle ID"
-        default: "i.am.kain.youtubeplus"
+        default: "i.am.kain.ytag"
         required: true
         type: string
       app_name:
