@@ -229,14 +229,28 @@ jobs:
           unzip -q "$IPA_FILE" -d ipa_contents
           APP_DIR=$(find ipa_contents/Payload -maxdepth 1 -name "*.app" -type d | head -1)
 
+          # Force bundle ID and app name in Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier ${{ inputs.bundle_id }}" "$APP_DIR/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName ${{ inputs.app_name }}" "$APP_DIR/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleName ${{ inputs.app_name }}" "$APP_DIR/Info.plist"
+          echo "Bundle ID set to: $(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$APP_DIR/Info.plist")"
+
           cp profile.mobileprovision "$APP_DIR/embedded.mobileprovision"
 
           security cms -D -i profile.mobileprovision > profile_full.plist
           /usr/libexec/PlistBuddy -x -c "Print :Entitlements" profile_full.plist > entitlements.plist
 
-          find "$APP_DIR" -name "*.framework" -o -name "*.appex" -o -name "*.dylib" | while read item; do
+          # Sign frameworks, dylibs, and plugins first
+          find "$APP_DIR" -name "*.framework" -type d | while read item; do
             codesign --force --sign "$SIGNING_IDENTITY" --timestamp=none "$item" || true
           done
+          find "$APP_DIR" -name "*.dylib" -type f | while read item; do
+            codesign --force --sign "$SIGNING_IDENTITY" --timestamp=none "$item" || true
+          done
+          find "$APP_DIR" -name "*.appex" -type d | while read item; do
+            codesign --force --sign "$SIGNING_IDENTITY" --timestamp=none --entitlements entitlements.plist "$item" || true
+          done
+          # Sign the app itself last
           codesign --force --sign "$SIGNING_IDENTITY" --timestamp=none --entitlements entitlements.plist "$APP_DIR"
 
           cd ipa_contents
