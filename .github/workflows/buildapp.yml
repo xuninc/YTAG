@@ -156,9 +156,11 @@ jobs:
               plist = plistlib.load(f)
           if 'UISupportedDevices' in plist:
               del plist['UISupportedDevices']
-          plist['CFBundleIdentifier'] = '${{ inputs.bundle_id }}'
-          plist['CFBundleDisplayName'] = '${{ inputs.app_name }}'
-          plist['CFBundleName'] = '${{ inputs.app_name }}'
+          bundle_id = """${{ inputs.bundle_id }}"""
+          app_name = """${{ inputs.app_name }}"""
+          plist['CFBundleIdentifier'] = bundle_id
+          plist['CFBundleDisplayName'] = app_name
+          plist['CFBundleName'] = app_name
           with open(filepath, 'wb') as f:
               plistlib.dump(plist, f)
           EOF
