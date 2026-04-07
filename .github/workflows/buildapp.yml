@@ -57,6 +57,8 @@ jobs:
     runs-on: macos-15-intel
     permissions:
       contents: write
+    env:
+      HAS_SIGNING: ${{ secrets.P12_BASE64 != '' }}
 
     steps:
       - name: Checkout
@@ -200,7 +202,7 @@ jobs:
           if-no-files-found: error
 
       - name: Sign IPA
-        if: ${{ secrets.P12_BASE64 != '' }}
+        if: ${{ env.HAS_SIGNING == 'true' }}
         env:
           P12_BASE64: ${{ secrets.P12_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -244,7 +246,7 @@ jobs:
           echo "SIGNED_IPA=packages/YTAG_signed.ipa" >> $GITHUB_ENV
 
       - name: Generate OTA manifest
-        if: ${{ secrets.P12_BASE64 != '' && inputs.create_release }}
+        if: ${{ env.HAS_SIGNING == 'true' && inputs.create_release }}
         run: |
           IPA_URL="https://github.com/${{ github.repository }}/releases/download/v${{ env.YT_VERSION }}-${{ env.YTLITE_VERSION }}/YTAG_signed.ipa"
           BUNDLE_ID="${{ inputs.bundle_id }}"
@@ -340,7 +342,7 @@ jobs:
           }'
 
       - name: OTA Install Link
-        if: ${{ secrets.P12_BASE64 != '' && inputs.create_release }}
+        if: ${{ env.HAS_SIGNING == 'true' && inputs.create_release }}
         run: |
           MANIFEST_URL="https://github.com/${{ github.repository }}/releases/download/v${{ env.YT_VERSION }}-${{ env.YTLITE_VERSION }}/manifest.plist"
           OTA_LINK="itms-services://?action=download-manifest&url=${MANIFEST_URL}"
