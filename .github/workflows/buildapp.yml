@@ -148,21 +148,19 @@ jobs:
           # Remove contents in the iPA that interfere with sideloading
           rm -rf tmp/Payload/YouTube.app/_CodeSignature/CodeResources
           rm -rf tmp/Payload/YouTube.app/PlugIns/*
-          # Modify Info.plist to remove UISupportedDevices (Python script)
+          # Modify Info.plist (Python script)
           python - <<EOF
           import plistlib
-          def remove_uisupporteddevices(filepath):
-              with open(filepath, 'rb') as f:
-                  plist = plistlib.load(f)
-
-              if 'UISupportedDevices' in plist:
-                  del plist['UISupportedDevices']
-
-              with open(filepath, 'wb') as f:
-                  plistlib.dump(plist, f)
-
           filepath = 'tmp/Payload/YouTube.app/Info.plist'
-          remove_uisupporteddevices(filepath)
+          with open(filepath, 'rb') as f:
+              plist = plistlib.load(f)
+          if 'UISupportedDevices' in plist:
+              del plist['UISupportedDevices']
+          plist['CFBundleIdentifier'] = '${{ inputs.bundle_id }}'
+          plist['CFBundleDisplayName'] = '${{ inputs.app_name }}'
+          plist['CFBundleName'] = '${{ inputs.app_name }}'
+          with open(filepath, 'wb') as f:
+              plistlib.dump(plist, f)
           EOF
           # Manually install the Open in YouTube extension
           cp -R Extensions/*.appex tmp/Payload/YouTube.app/PlugIns
