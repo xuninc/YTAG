@@ -117,6 +117,14 @@ jobs:
         env:
           THEOS: ${{ github.workspace }}/theos
 
+      - name: Setup headers for sub-tweaks
+        run: |
+          ln -sf ${{ github.workspace }}/Tweaks/YouTubeHeader $THEOS/include/YouTubeHeader
+          ln -sf ${{ github.workspace }}/Tweaks/PSHeader $THEOS/include/PSHeader
+          ln -sf ${{ github.workspace }}/Tweaks/YTHeaders $THEOS/include/YTHeaders
+        env:
+          THEOS: ${{ github.workspace }}/theos
+
       - name: Build sub-tweaks
         run: |
           build_tweak() {
