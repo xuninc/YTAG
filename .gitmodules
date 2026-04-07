@@ -30,7 +30,7 @@
 	url = https://github.com/PoomSmart/YTABConfig
 [submodule "Tweaks/YTUHD"]
 	path = Tweaks/YTUHD
-	url = https://github.com/splaser/YTUHD.git
+	url = https://github.com/Tonwalter888/YTUHD.git
 [submodule "Tweaks/YouGroupSettings"]
 	path = Tweaks/YouGroupSettings
 	url = https://github.com/xuninc/YouGroupSettings.git
