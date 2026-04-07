@@ -172,16 +172,18 @@ jobs:
           # Collect all dylibs and frameworks to inject
           INJECT_FILES=""
 
-          # YTLite dylib from deb
+          # YTLite dylib from deb — copy to workspace root to avoid spaces in path
           YTLITE_DYLIB=$(find ytlite_extract -name "YTLite.dylib" | head -1)
           if [ -n "$YTLITE_DYLIB" ]; then
-            INJECT_FILES="$INJECT_FILES $YTLITE_DYLIB"
+            cp "$YTLITE_DYLIB" ./YTLite.dylib
+            INJECT_FILES="$INJECT_FILES YTLite.dylib"
           fi
 
-          # YTLite bundle
+          # YTLite bundle — copy to avoid "Application Support" space
           YTLITE_BUNDLE=$(find ytlite_extract -name "YTLite.bundle" -type d | head -1)
           if [ -n "$YTLITE_BUNDLE" ]; then
-            INJECT_FILES="$INJECT_FILES $YTLITE_BUNDLE"
+            cp -R "$YTLITE_BUNDLE" ./YTLite.bundle
+            INJECT_FILES="$INJECT_FILES YTLite.bundle"
           fi
 
           # YTAG tweak deb
