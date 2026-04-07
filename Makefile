@@ -12,7 +12,7 @@ INSTALL_TARGET_PROCESSES = YouTube
 TWEAK_NAME = YTLitePlus
 
 YTLitePlus_FILES = YTLitePlus.xm $(shell find Source -name '*.xm' -o -name '*.x' -o -name '*.m')
-YTLitePlus_FRAMEWORKS = UIKit Security
+YTLitePlus_FRAMEWORKS = UIKit Security CoreGraphics MediaPlayer AVFoundation AVKit MobileCoreServices UniformTypeIdentifiers
 YTLitePlus_CFLAGS = -fobjc-arc -Wno-deprecated-declarations -Wno-unsupported-availability-guard -Wno-unused-but-set-variable -DTWEAK_VERSION=$(PACKAGE_VERSION)
 
 include $(THEOS)/makefiles/common.mk
