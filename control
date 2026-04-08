@@ -1,9 +1,0 @@
-Package: com.xuninc.ytag
-Name: YouTube Afterglow
-Version: 1.0.0
-Architecture: iphoneos-arm64
-Description: YouTube Afterglow - Enhanced YouTube experience
-Maintainer: xuninc
-Author: xuninc
-Section: Tweaks
-Depends: mobilesubstrate

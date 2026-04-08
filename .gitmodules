@@ -33,7 +33,7 @@
 	url = https://github.com/splaser/YTUHD.git
 [submodule "Tweaks/YouGroupSettings"]
 	path = Tweaks/YouGroupSettings
-	url = https://github.com/xuninc/YouGroupSettings.git
+	url = https://github.com/PoomSmart/YouGroupSettings
 [submodule "Tweaks/Return-YouTube-Dislikes"]
 	path = Tweaks/Return-YouTube-Dislikes
 	url = https://github.com/PoomSmart/Return-YouTube-Dislikes.git
